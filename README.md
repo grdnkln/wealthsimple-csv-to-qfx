@@ -11,6 +11,22 @@ single Quicken **QFX** (OFX 1.02 SGML) file that imports cleanly into
 - Merges multiple monthly CSVs into one QFX and removes duplicate rows that
   appear where consecutive statements overlap.
 
+## Getting the CSV files from WealthSimple
+
+The input CSVs are the **monthly statements** WealthSimple generates for your
+chequing account. Download them from the **Documents** section:
+
+1. Sign in to WealthSimple (app or [my.wealthsimple.com](https://my.wealthsimple.com)).
+2. Open your profile / account menu and go to **Documents**.
+3. Select your account from the Filters section on the right
+4. Download each monthly statement by clicking the **CSV** button beside each statement
+
+Repeat for each month you want to import, then pass all the CSVs to the script
+(see Usage below).
+
+See WealthSimple's help article for the current steps and screenshots:
+<https://help.wealthsimple.com/hc/en-ca/articles/360056580894-Find-your-monthly-statements>
+
 ## Usage
 
 ```bash
