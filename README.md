@@ -1,6 +1,11 @@
 # WealthSimple CSV → QFX (YNAB4) converter
 
-(written by Claude)
+
+## AI Usage
+
+This entire project was written by Claude, including this README.md
+
+## Introduction
 
 `ws_csv_to_qfx.py` converts WealthSimple chequing-account CSV statements into a
 single Quicken **QFX** (OFX 1.02 SGML) file that imports cleanly into
