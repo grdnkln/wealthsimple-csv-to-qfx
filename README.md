@@ -1,5 +1,7 @@
 # WealthSimple CSV → QFX (YNAB4) converter
 
+(written by Claude)
+
 `ws_csv_to_qfx.py` converts WealthSimple chequing-account CSV statements into a
 single Quicken **QFX** (OFX 1.02 SGML) file that imports cleanly into
 **YNAB4** (You Need A Budget 4).
