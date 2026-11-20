@@ -5,7 +5,7 @@ QFX (OFX 1.02 SGML) file suitable for import into YNAB4.
 Standard library only. All processing is local; nothing is sent over a network.
 
 Usage:
-    python3 ws_csv_to_qfx.py [--config account.json] IN1.csv [IN2.csv ...] OUT.qfx
+    python3 ws_csv_to_qfx.py [--config accounts.json] IN1.csv [IN2.csv ...] OUT.qfx
 
 The last positional argument is the output QFX path; every preceding positional
 argument is an input CSV. Multiple CSVs are merged, sorted by date, and
@@ -25,28 +25,34 @@ from decimal import Decimal, InvalidOperation
 # Columns expected in the WealthSimple statement CSV.
 REQUIRED_COLUMNS = ("date", "transaction", "description", "amount", "balance", "currency")
 
-# Keys we require from account.json.
+# Section and keys we require from accounts.json.
+CONFIG_SECTION = "wealthsimple"
 CONFIG_KEYS = ("bankid", "acctid", "accttype", "curdef", "org", "fid", "intu_bid")
+CONFIG_FILENAME = "accounts.json"
 
 
 class ConversionError(Exception):
     """Raised for user-facing errors (bad CSV, missing config, etc.)."""
 
 
-def load_config(path):
-    """Load and validate account.json."""
+def load_config(path, section=CONFIG_SECTION, keys=CONFIG_KEYS):
+    """Load accounts.json and validate one account section of it."""
     try:
         with open(path, encoding="utf-8") as fh:
-            cfg = json.load(fh)
+            data = json.load(fh)
     except FileNotFoundError:
         raise ConversionError(f"Config file not found: {path}")
     except json.JSONDecodeError as exc:
         raise ConversionError(f"Config file {path} is not valid JSON: {exc}")
 
-    missing = [k for k in CONFIG_KEYS if k not in cfg]
+    cfg = data.get(section) if isinstance(data, dict) else None
+    if not isinstance(cfg, dict):
+        raise ConversionError(f"Config file {path} has no '{section}' section")
+    missing = [k for k in keys if k not in cfg]
     if missing:
         raise ConversionError(
-            f"Config file {path} is missing keys: {', '.join(missing)}"
+            f"Config file {path} section '{section}' is missing keys: "
+            f"{', '.join(missing)}"
         )
     return cfg
 
@@ -250,8 +256,8 @@ def parse_args(argv):
     parser.add_argument(
         "--config",
         default=None,
-        help="Path to account.json (default: account.json next to this script, "
-             "then the current directory).",
+        help=f"Path to {CONFIG_FILENAME} (default: {CONFIG_FILENAME} next to "
+             f"this script, then the current directory).",
     )
     parser.add_argument(
         "paths",
@@ -269,10 +275,10 @@ def resolve_config_path(explicit):
     if explicit:
         return explicit
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    candidate = os.path.join(script_dir, "account.json")
+    candidate = os.path.join(script_dir, CONFIG_FILENAME)
     if os.path.exists(candidate):
         return candidate
-    return "account.json"
+    return CONFIG_FILENAME
 
 
 def main(argv=None):

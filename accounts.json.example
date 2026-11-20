@@ -1,0 +1,16 @@
+{
+  "wealthsimple": {
+    "bankid": "00000",
+    "acctid": "00000000",
+    "accttype": "CHECKING",
+    "curdef": "CAD",
+    "org": "My Bank",
+    "fid": "00000",
+    "intu_bid": "00000"
+  },
+  "canadiantire": {
+    "acctid": "00000000000",
+    "curdef": "CAD",
+    "intu_bid": "10177"
+  }
+}

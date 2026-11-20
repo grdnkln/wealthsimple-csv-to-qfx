@@ -1,3 +1,6 @@
+accounts.json
 account.json
 *.qfx
 *.csv
+*.pdf
+__pycache__/
